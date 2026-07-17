@@ -11,5 +11,49 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String        @id @default(uuid())
+  email         String        @unique
+  passwordHarsh String
+  applications  Application[]
+  createdAt     DateTime      @default(now())
+
+  @@map("users")
+}
+
+model Application {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  company     String
+  role        String
+  status      String   @default("APPLIED")
+  appliedDate DateTime
+  jobUrl      String?
+  salaryMin   Int?
+  salaryMax   Int?
+  notes       Note[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("applications")
+}
+
+model Note {
+  id            String      @id @default(uuid())
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String
+  body          String
+  createdAt     DateTime    @default(now())
+
+  @@map("notes")
+}
+
+enum Status {
+  APPLIED
+  INTERVIEWING
+  OFFER
+  REJECTED
 }

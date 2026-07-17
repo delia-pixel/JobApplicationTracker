@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/delia-pixel/JobApplicationTracker#readme",
   "devDependencies": {
+    "dotenv": "^17.4.2",
     "prisma": "^6.19.3"
   },
   "dependencies": {
